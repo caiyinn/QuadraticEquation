@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/cc  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -mmacosx-version-min=12.5 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/maths.dir/main.c.o -o maths  -lm 

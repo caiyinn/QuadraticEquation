@@ -1,0 +1,3 @@
+/Users/caiyin/Desktop/QuadraticEquation/QuadraticEquation/build/CMakeFiles/maths.dir
+/Users/caiyin/Desktop/QuadraticEquation/QuadraticEquation/build/CMakeFiles/edit_cache.dir
+/Users/caiyin/Desktop/QuadraticEquation/QuadraticEquation/build/CMakeFiles/rebuild_cache.dir
