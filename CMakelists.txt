@@ -3,5 +3,5 @@ project(maths C)
 
 set(CMAKE_C_STANDARD 11)
 
-link_libraries(m)
+link_libraries(m) # link math library so that we can use sin, cos, etc.
 add_executable(maths main.c)

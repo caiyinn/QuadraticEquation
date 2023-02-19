@@ -1,14 +1,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <ctype.h>
 
 int main() {
-    double a, b, c, discriminant, root1, root2, realPart, imagPart;
-    printf("Enter coefficients a, b and c: ");
-    scanf("%lf %lf %lf", &a, &b, &c);
+    float a, b, c, discriminant, root1, root2, realPart, imagPart;
+    int valid_input = 0; //flag for valid input
+    // get input from user and ensure it is valid
+    do {
+        printf("Enter coefficient of a, b, c: ");
+        valid_input = scanf("%f %f %f", &a, &b, &c);
+        while (getchar() != '\n' ); // clear buffer
+        if (valid_input != 3) {
+            printf("Invalid input. Please try again.\n");
+        }
+        if (a == 0) {
+            printf("a cannot be zero. Please try again.\n");
+            valid_input = 0;
+        }
+    } while (valid_input != 3);
 
-    discriminant = b * b - 4 * a * c;
-
+    discriminant = b*b - 4*a*c;
+    printf("discriminant = %.2lf\n", discriminant);
     // condition for real and different roots
     if (discriminant > 0) {
         root1 = (-b + sqrt(discriminant)) / (2 * a);
@@ -34,3 +47,5 @@ int main() {
 
     return 0;
 } 
+
+// git push origin cy 
