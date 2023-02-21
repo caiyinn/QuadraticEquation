@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <ctype.h>
+// #include <ctype.h>
 
 int main() {
     float a, b, c, discriminant, root1, root2, realPart, imagPart;
