@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <ctype.h>
+#include "test.h"
+// #include <ctype.h>
 
 int main() {
     float a, b, c, discriminant, root1, root2, realPart, imagPart;
@@ -29,14 +30,14 @@ int main() {
         root1 = (-b + sqrt(discriminant)) / (2 * a);
         root2 = (-b - sqrt(discriminant)) / (2 * a);
         printf("real and different roots\n");
-        printf("root1 = %.2lf and root2 = %.2lf", root1, root2);
+        printf("root1 = %.2lf and root2 = %.2lf\n", root1, root2);
     }
 
     // condition for real and equal roots
     else if (discriminant == 0) {
         root1 = root2 = -b / (2 * a);
         printf("real and equal roots\n");
-        printf("root1 = root2 = %.2lf;", root1);
+        printf("root1 = root2 = %.2lf\n;", root1);
     }
 
     // if roots are not real
@@ -44,8 +45,16 @@ int main() {
         realPart = -b / (2 * a);
         imagPart = sqrt(-discriminant) / (2 * a);
         printf("no real roots\n");
-        printf("root1 = %.2lf+%.2lfi and root2 = %.2f-%.2fi", realPart, imagPart, realPart, imagPart);
+        printf("root1 = %.2lf+%.2lfi and root2 = %.2f-%.2fi\n", realPart, imagPart, realPart, imagPart);
     }
+
+    // plot the graph
+    init_grid();
+    for (float x = -5; x <= 5; x += 0.1) {
+        float y = a*x*x + b*x + c;
+        plot(rintf(x*10), rintf(y*8));
+    }
+    show_grid();
 
     return 0;
 } 
