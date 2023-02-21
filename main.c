@@ -12,16 +12,18 @@ int main() {
         valid_input = scanf("%f %f %f", &a, &b, &c);
         while (getchar() != '\n' ); // clear buffer
         if (valid_input != 3) {
-            printf("Invalid input. Please try again.\n");
+            printf("Invalid input, make sure that there is no characters in the input. Please try again.\n");
         }
         if (a == 0) {
             printf("a cannot be zero. Please try again.\n");
             valid_input = 0;
         }
     } while (valid_input != 3);
-
+    
+    // calculate discriminant
     discriminant = b*b - 4*a*c;
-    printf("discriminant = %.2lf\n", discriminant);
+
+    printf("discriminant = %.2f\n", discriminant);
     // condition for real and different roots
     if (discriminant > 0) {
         root1 = (-b + sqrt(discriminant)) / (2 * a);
@@ -41,11 +43,12 @@ int main() {
     else {
         realPart = -b / (2 * a);
         imagPart = sqrt(-discriminant) / (2 * a);
-        printf("imaginary roots\n");
+        printf("no real roots\n");
         printf("root1 = %.2lf+%.2lfi and root2 = %.2f-%.2fi", realPart, imagPart, realPart, imagPart);
     }
 
     return 0;
 } 
 
-// git push origin cy 
+// git push origin cy
+//gcc -std=c11 -pedantic-errors -Wstrict-prototypes -Wall -Wextra -Werror -Wconversion -o test test.c
