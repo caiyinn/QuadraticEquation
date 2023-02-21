@@ -1,8 +1,10 @@
+
+
 #include <stdio.h>
 #include <math.h>
 
-#define WIDTH 60
-#define HEIGHT 20
+#define WIDTH 110
+#define HEIGHT 110
 #define X WIDTH/2
 #define Y HEIGHT/2
 #define XMAX WIDTH-X-1
@@ -16,20 +18,20 @@ int plot(int x, int y);
 void init_grid(void);
 void show_grid(void);
 
-int main()
-{
-    float x,y;
+// int main()
+// {
+//     float x,y;
 
-    init_grid();
-    for(x=-3.14159;x<=3.14159;x+=0.1)
-    {
-        y = sin(x);
-        plot(rintf(x*10),rintf(y*8));
-    }
-    show_grid();
+//     init_grid();
+//     // for(x=-3.14159;x<=3.14159;x+=0.1)
+//     // {
+//     //     y = sin(x);
+//     //     plot(rintf(x*10),rintf(y*8));
+//     // }
+//     show_grid();
 
-    return(0);
-}
+//     return(0);
+// }
 
 /* Set "pixel" at specific coordinates */
 int plot(int x, int y)
