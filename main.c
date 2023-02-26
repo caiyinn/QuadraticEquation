@@ -1,80 +1,141 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
-#include "test.h"
-// #include <ctype.h>
+#include <string.h>
 
-int main() {
-    float a, b, c, discriminant, root1, root2, realPart, imagPart;
-    int valid_input = 0; //flag for valid input
-    int count = 0; // count number of input
-    char name[10][20] = {"a","b","c", "Discriminant", "Type of Equation", "Number of Roots", "Root 1", "Root 2", "Real Number", "Imaginary Number"}; 
-    // get input from user and ensure it is valid
-    do {
-        printf("Enter coefficient of a, b, c: ");
-        valid_input = scanf("%f %f %f", &a, &b, &c);
-        while (getchar() != '\n' ); // clear buffer
-        if (valid_input != 3) {
-            printf("Invalid input, make sure that there is no characters in the input. Please try again.\n");
-        }
-        // check if a is zero
-        if (a == 0) {
-            printf("a cannot be zero. Please try again.\n");
-            valid_input = 0;
-        }
-        // check if user has entered invalid input 5 times
-        if (count == 4) {
-            printf("You have entered invalid input 5 times. Program will exit now.\n");
-            exit(0);
-        }
-        count++;
-    } while (valid_input != 3);
-    
-    // calculate discriminant
-    discriminant = b*b - 4*a*c;
+// Function to get a double input from the user
+int get_input(const char* prompt, double* value, int check_a) {
+    char input[256]; 
+    printf("%s", prompt); 
+    if (!fgets(input, sizeof(input), stdin)) {
+        printf("Error: Failed to read input.\n");
+        return 0;
+    }
+    char* endptr; // pointer to the end of the string
+    double num = strtod(input, &endptr); // strtod is used to convert the string to a double
+    // Check if the input is a valid double, 
+    if (endptr == input || *endptr != '\n') {
+        printf("Error: Invalid input format. Please make sure that the input does not have characters.\n");
+        return 0;
+    }
+    // if a is 0, input is invalid, check_a is flag to check if a is 0
+    if (check_a && num ==0){
+        printf("Error: Invalid cannot put 0 for a.\n");
+        return 0;
+    }
+    *value = num;
+    return 1;
+}
 
-    printf("discriminant = %.2f\n", discriminant);
-    // condition for real and different roots
+// Function to solve a quadratic equation of the form ax^2 + bx + c = 0
+int solve_quadratic(double a, double b, double c, double* root1, double* root2) {
+    double discriminant = b * b - 4 * a * c;
     if (discriminant > 0) {
-        root1 = (-b + sqrt(discriminant)) / (2 * a);
-        root2 = (-b - sqrt(discriminant)) / (2 * a);
-        printf("real and different roots\n");
-        printf("root1 = %.2lf and root2 = %.2lf\n", root1, root2);
+        // Two real roots
+        *root1 = (-b + sqrt(discriminant)) / (2 * a);
+        *root2 = (-b - sqrt(discriminant)) / (2 * a);
+        return 1;
+    } else if (discriminant == 0) {
+        // One real root
+        *root1 = -b / (2 * a);
+        *root2 = *root1;
+        return 2;
+    } else {
+        // Two complex roots
+        *root1 = -b / (2 * a);
+        *root2 = sqrt(-discriminant) / (2 * a);
+        return 3;
+    }
+}
+
+// Function to print the roots of a quadratic equation
+void determine_roots(double root1, double root2, int status, char** root_type, char *x1, char *x2){
+    switch(status){
+        case 1: 
+            *root_type = strdup("Real and different"); // strdup is used to copy the string to the pointer
+            sprintf(x1, "%.2lf", root1); // sprintf is used to convert the double to a string
+            sprintf(x2, "%.2lf", root2);
+            break;
+        case 2:
+            *root_type = strdup("Real and equal");
+            sprintf(x1, "%.2lf", root1);
+            sprintf(x2, "%.2lf", root2);
+            break;
+        case 3:
+            *root_type = strdup("Complex and different");
+            sprintf(x1, "%.2lf + %.2lfi", root1, root2);
+            sprintf(x2, "%.2lf - %.2lfi", root1, root2);
+            break;
+        default:
+            printf("Error: Invalid status code returned from solve_quadratic.\n");
+            break;
+    }
+}
+
+// Function to print the roots of a quadratic equation in a table
+void print_table(double a, double b, double c, char* x1, char* x2, char **root_type) {
+    printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+\n");
+    printf("|  Input a  |  Input b  |  Input c  |     Root 1     |     Root 2     |          Type         |\n");
+    printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+\n");
+    for (int i = 0; i < 1; i++) {
+        printf("| %9.2f | %9.2f | %9.2f | %14s | %14s | %21s | \n", a, b, c, x1, x2, *root_type);
+        printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+\n");
+    }
+}
+
+// Main function
+int main() {
+    double a, b, c, root1, root2;
+    char *root_type; 
+    char x1[20]; // string to store the value of root1
+    char x2[20]; // string to store the value of root2
+    int max_attempts = 3;
+
+    printf("Quadratic Equation Solver:  ax%s + bx + c = 0\n", "\u00B2"); // \u00B2 is used to print the superscript 2
+    int num_attempts=0; 
+    while (num_attempts < 3) {
+        printf("You have %d attempt(s) left.\n", max_attempts - num_attempts);
+        if (!get_input("Enter the coefficient of x^2 (a): ", &a, 1)) {
+            num_attempts++;
+            continue;
+        }
+        if (!get_input("Enter the coefficient of x (b): ", &b, 0)) {
+            num_attempts++;
+            continue;
+        }
+        if (!get_input("Enter the constant term (c): ", &c, 0)) {
+            num_attempts++;
+            continue;
+        }
+        break;
     }
 
-    // condition for real and equal roots
-    else if (discriminant == 0) {
-        root1 = root2 = -b / (2 * a);
-        printf("real and equal roots\n");
-        printf("root1 = root2 = %.2lf\n;", root1);
+    // Check if the user has exceeded the number of attempts
+    if (num_attempts == 3){
+        printf("Too many incorrect attempts. Program terminating.\n");
+        return 1;
     }
+    // if the user has not exceeded the number of attempts, print the equation
+    printf("\nThe equation is: %.2lfx%s %+.2lfx %+.2lf = 0\n", a, "\u00B2", b, c); // %+.2lf is used to print the sign of the constant term
 
-    // if roots are not real
-    else {
-        realPart = -b / (2 * a);
-        imagPart = sqrt(-discriminant) / (2 * a);
-        printf("no real roots\n");
-        printf("root1 = %.2lf+%.2lfi and root2 = %.2f-%.2fi\n", realPart, imagPart, realPart, imagPart);
-    }
-    // plot table
-    // printf("+==================================================================+\n");
-    // printf("|          Quadratic Equation: %.2lfx^2  %.2lfx  %.2lf = 0          |\n", a, b, c);
-    // printf("+=========+=========+=========+==================+=================+\n");
-    // for (int i=0; i<1; i++) {
-    //     printf("%s", name[1]);
-    //     printf("| %+11s     |%+11s     |%+11s     |%+11s     |%+11s     |%+11s     |%+11s     |%+11s     |%+11s     |%+11s     |\n", name[1], name[2], name[3], name[4], name[5], name[6], name[7], name[8], name[9]);
-        
-    // }
-    // plot the graph
-    // init_grid();
-    // for (float x = -5; x <= 5; x += 0.1) {
-    //     float y = a*x*x + b*x + c;
-    //     plot(rintf(x*10), rintf(y*8));
-    // }
-    // show_grid();
+    // Solve the quadratic equation and get the status code
+    int status = solve_quadratic(a, b, c, &root1, &root2);
+
+    // determine the roots and root values
+    determine_roots(root1, root2, status, &root_type, x1, x2);
+
+    // Print the table of inputs and outputs
+    print_table(a, b, c, x1, x2, &root_type);
+
+    // End of program
+    printf("Program completed successfully!\n");
+
+    // Wait for the user to press the enter key before exiting the program
+    // printf("Press the enter key to exit the program...\n");
+    // getchar();
+    
+    // Free the memory allocated for root_type
+    free (root_type);
 
     return 0;
-} 
-
-// git push origin cy
-//gcc -std=c11 -pedantic-errors -Wstrict-prototypes -Wall -Wextra -Werror -Wconversion -o test test.c
+}
