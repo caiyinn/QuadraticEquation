@@ -28,8 +28,7 @@ int get_input(const char* prompt, double* value, int check_a) {
 }
 
 // Function to solve a quadratic equation of the form ax^2 + bx + c = 0
-int solve_quadratic(double a, double b, double c, double* root1, double* root2) {
-    double discriminant = b * b - 4 * a * c;
+int solve_quadratic(double a, double b, double c, double* root1, double* root2, double discriminant) {
     if (discriminant > 0) {
         // Two real roots
         *root1 = (-b + sqrt(discriminant)) / (2 * a);
@@ -73,13 +72,13 @@ void determine_roots(double root1, double root2, int status, char** root_type, c
 }
 
 // Function to print the roots of a quadratic equation in a table
-void print_table(double a, double b, double c, char* x1, char* x2, char **root_type) {
-    printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+\n");
-    printf("|  Input a  |  Input b  |  Input c  |     Root 1     |     Root 2     |          Type         |\n");
-    printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+\n");
+void print_table(double a, double b, double c, char* x1, char* x2, char **root_type, double discriminant) {
+    printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+----------------+\n");
+    printf("|  Input a  |  Input b  |  Input c  |     Root 1     |     Root 2     |          Type         |  Discriminant  |\n");
+    printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+----------------|\n");
     for (int i = 0; i < 1; i++) {
-        printf("| %9.2f | %9.2f | %9.2f | %14s | %14s | %21s | \n", a, b, c, x1, x2, *root_type);
-        printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+\n");
+        printf("| %9.2f | %9.2f | %9.2f | %14s | %14s | %21s | %14.2f |\n", a, b, c, x1, x2, *root_type, discriminant);
+        printf("+-----------+-----------+-----------+----------------+----------------+-----------------------+----------------|\n\n");
     }
 }
 
@@ -115,24 +114,24 @@ int main() {
         printf("Too many incorrect attempts. Program terminating.\n");
         return 1;
     }
+    
+    double discriminant = b * b - 4 * a * c;
+    
     // if the user has not exceeded the number of attempts, print the equation
     printf("\nThe equation is: %.2lfx%s %+.2lfx %+.2lf = 0\n", a, "\u00B2", b, c); // %+.2lf is used to print the sign of the constant term
-
+    printf("Discriminant(d) = b²-4ac/2a: (%.2lf)²-4(%.2lf)(%.2lf)= %.2lf\n", b,a,c,discriminant);
+    printf("Roots(x) = -b ± √b²-4ac/2a: -(%.2lf) ± √%.2lf/2(%.2lf)\n\n", b,discriminant,a);
     // Solve the quadratic equation and get the status code
-    int status = solve_quadratic(a, b, c, &root1, &root2);
+    int status = solve_quadratic(a, b, c, &root1, &root2, discriminant);
 
     // determine the roots and root values
     determine_roots(root1, root2, status, &root_type, x1, x2);
-
+    
     // Print the table of inputs and outputs
-    print_table(a, b, c, x1, x2, &root_type);
+    print_table(a, b, c, x1, x2, &root_type,discriminant);
 
     // End of program
     printf("Program completed successfully!\n");
-    
-    // Wait for the user to press the enter key before exiting the program
-    // printf("Press the enter key to exit the program...\n");
-    // getchar();
     
     // Free the memory allocated for root_type
     free (root_type);
