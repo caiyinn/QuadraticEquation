@@ -1,7 +1,12 @@
 # QuadraticEquation
 MA4830 Assignment 1
 
-* Lee Wen Jie - ID
-* CY - ID
+## 1. Compile the script
+'''
+gcc -lm -o main main.c
+'''
 
-'''gcc -lm -o main main.c'''
+## 2. Run the executable file
+'''
+./main
+'''

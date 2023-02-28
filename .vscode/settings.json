@@ -2,6 +2,7 @@
     "files.associations": {
         "string": "c",
         "iosfwd": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "string.h": "c"
     }
 }
